@@ -28,7 +28,7 @@ end
 local function openShop(shop, data)
     QBCore.Functions.TriggerCallback('qb-shops:server:SetShopInv', function(shopInvJson)
         local function SetupItems(checkLicense)
-            local products =  Config.Locations[shop].products
+            local products = Config.Locations[shop].products
             local items = {}
             local curJob
             local curGang
@@ -41,32 +41,32 @@ local function openShop(shop, data)
                 else print('No shop inventory found -- defaults enabled') end
             end
             for i = 1, #products do
-            curJob = products[i].requiredJob
-            curGang = products[i].requiredGang
-            if curJob then goto jobCheck end
-            if curGang then goto gangCheck end
-            if checkLicense then goto licenseCheck end
-            items[#items + 1] = products[i]
-            goto nextIteration
-            :: jobCheck ::
-            for i2 = 1, #curJob do
-                if PlayerData.job.name == curJob[i2] then
-                    items[#items + 1] = products[i]
-                end
-            end
-            goto nextIteration
-            :: gangCheck ::
-            for i2 = 1, #curGang do
-                if PlayerData.gang.name == curGang[i2] then
-                    items[#items + 1] = products[i]
-                end
-            end
-            goto nextIteration
-            :: licenseCheck ::
-            if not products[i].requiresLicense then
+                curJob = products[i].requiredJob
+                curGang = products[i].requiredGang
+                if curJob then goto jobCheck end
+                if curGang then goto gangCheck end
+                if checkLicense then goto licenseCheck end
                 items[#items + 1] = products[i]
-            end
-            :: nextIteration ::
+                goto nextIteration
+                :: jobCheck ::
+                for i2 = 1, #curJob do
+                    if PlayerData.job.name == curJob[i2] then
+                        items[#items + 1] = products[i]
+                    end
+                end
+                goto nextIteration
+                :: gangCheck ::
+                for i2 = 1, #curGang do
+                    if PlayerData.gang.name == curGang[i2] then
+                        items[#items + 1] = products[i]
+                    end
+                end
+                goto nextIteration
+                :: licenseCheck ::
+                if not products[i].requiresLicense then
+                    items[#items + 1] = products[i]
+                end
+                :: nextIteration ::
             end
             return items
         end
